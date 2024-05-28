@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = 'https://example-blog.com'
+url = 'https://vkatsikaros.github.io/dataharvest24-www.github.io/'
 response = requests.get(url)
 
 if response.status_code == 200:
