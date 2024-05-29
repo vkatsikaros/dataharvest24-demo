@@ -13,13 +13,6 @@ if response.status_code == 200:
         table = div.find('table')
 
         if table is not None:
-            headers = []
-            thead = table.find('thead')
-            if thead is not None:
-                for th in thead.find_all('th'):
-                    headers.append(th.text.strip())
-            else:
-                print("Thead not found in the table.")
 
             rows = []
             tbody = table.find('tbody')
@@ -36,19 +29,15 @@ if response.status_code == 200:
                             row_data.append(text)
                         else:
                             row_data.append(td.text.strip())
-                    rows.append(row_data)
+                    rows.append(row_data[3:5])
             else:
                 print("Tbody not found in the table.")
 
             output = io.StringIO()
             csv_writer = csv.writer(output)
             
-            if headers:
-                csv_writer.writerow(headers)
-                
-            if rows:
-                for row in rows:
-                    csv_writer.writerow(row)
+            for row in rows:
+                csv_writer.writerow(row)
 
             csv_content = output.getvalue()
             print(csv_content)
