@@ -28,7 +28,7 @@ if response.status_code == 200:
                         # Find the <a> tag within the <td>
                         a_tag = td.find('a')
                         if a_tag is not None:
-                            url = a_tag['href']
+                            url = a_tag.get('href', None)  # Use get to avoid KeyError
                             text = a_tag.text.strip()
                             row_data.append((url, text))
                         else:
