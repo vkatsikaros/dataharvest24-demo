@@ -7,23 +7,37 @@ response = requests.get(url)
 if response.status_code == 200:
     soup = BeautifulSoup(response.content, 'html.parser')
     div = soup.find('div', id='_idItemTableForP')
-
     if div is not None:
         table = div.find('table')
 
         if table is not None:
             headers = []
-            for th in table.find('thead').find_all('th'):
-                headers.append(th.text.strip())
+            thead = table.find('thead')
+            if thead is not None:
+                for th in thead.find_all('th'):
+                    headers.append(th.text.strip())
+            else:
+                print("Thead not found in the table.")
 
             rows = []
-            for tr in table.find('tbody').find_all('tr'):
-                cells = [td.text.strip() for td in tr.find_all('td')]
-                rows.append(cells)
+            tbody = table.find('tbody')
+            if tbody is not None:
+                for tr in tbody.find_all('tr'):
+                    cells = [td.text.strip() for td in tr.find_all('td')]
+                    rows.append(cells)
+            else:
+                print("Tbody not found in the table.")
 
-            print("Headers:", headers)
-            for row in rows:
-                print("Row:", row)
+            if headers:
+                print("Headers:", headers)
+            else:
+                print("No headers found.")
+                
+            if rows:
+                for row in rows:
+                    print("Row:", row)
+            else:
+                print("No rows found.")
         else:
             print("Table not found within the div. Check the structure.")
     else:
