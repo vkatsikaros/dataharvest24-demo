@@ -37,6 +37,15 @@ if response.status_code == 200:
 
             for row in rows:
                 print("Code:", row[0])
+            
+            # Write extracted codes to a CSV file
+            with open('extracted_codes.csv', 'w', newline='') as csvfile:
+                csv_writer = csv.writer(csvfile)
+                for row in rows:
+                    csv_writer.writerow(row)
+                    
+            print("CSV file 'extracted_codes.csv' has been created with the extracted codes.")
+            
         else:
             print("Table not found within the div. Check the structure.")
     else:
