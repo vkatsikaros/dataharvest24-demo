@@ -6,8 +6,7 @@ response = requests.get(url)
 
 if response.status_code == 200:
     soup = BeautifulSoup(response.content, 'html.parser')
-    
-    table = soup.find('table', id='target-table')  # Use id or class as necessary
+    table = soup.find('table')  # Use id or class as necessary
 
     headers = []
     for th in table.find('thead').find_all('th'):
