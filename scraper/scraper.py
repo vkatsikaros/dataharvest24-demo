@@ -1,5 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
+import csv
+import io
 
 url = 'https://vkatsikaros.github.io/dataharvest24-www.github.io/'
 response = requests.get(url)
@@ -30,28 +32,25 @@ if response.status_code == 200:
                         if a_tag is not None:
                             url = a_tag.get('href', None)  # Use get to avoid KeyError
                             text = a_tag.text.strip()
-                            row_data.append((url, text))
+                            row_data.append(f'"{url}", "{text}"')
                         else:
-                            row_data.append((None, td.text.strip()))
+                            row_data.append(f'"{td.text.strip()}"')
                     rows.append(row_data)
             else:
                 print("Tbody not found in the table.")
-
+    
+            output = io.StringIO()
+            csv_writer = csv.writer(output)
+            
             if headers:
-                print("Headers:", headers)
-            else:
-                print("No headers found.")
+                csv_writer.writerow(headers)
                 
             if rows:
                 for row in rows:
-                    for cell in row:
-                        url, text = cell
-                        if url:
-                            print(f"URL: {url}, Text: {text}")
-                        else:
-                            print(f"Text: {text}")
-            else:
-                print("No rows found.")
+                    csv_writer.writerow(row)
+
+            csv_content = output.getvalue()
+            print(csv_content)
         else:
             print("Table not found within the div. Check the structure.")
     else:
