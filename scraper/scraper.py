@@ -23,8 +23,17 @@ if response.status_code == 200:
             tbody = table.find('tbody')
             if tbody is not None:
                 for tr in tbody.find_all('tr'):
-                    cells = [td.text.strip() for td in tr.find_all('td')]
-                    rows.append(cells)
+                    row_data = []
+                    for td in tr.find_all('td'):
+                        # Find the <a> tag within the <td>
+                        a_tag = td.find('a')
+                        if a_tag is not None:
+                            url = a_tag['href']
+                            text = a_tag.text.strip()
+                            row_data.append((url, text))
+                        else:
+                            row_data.append((None, td.text.strip()))
+                    rows.append(row_data)
             else:
                 print("Tbody not found in the table.")
 
@@ -35,7 +44,12 @@ if response.status_code == 200:
                 
             if rows:
                 for row in rows:
-                    print("Row:", row)
+                    for cell in row:
+                        url, text = cell
+                        if url:
+                            print(f"URL: {url}, Text: {text}")
+                        else:
+                            print(f"Text: {text}")
             else:
                 print("No rows found.")
         else:
