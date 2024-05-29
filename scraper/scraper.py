@@ -32,7 +32,8 @@ if response.status_code == 200:
                         if a_tag is not None:
                             url = a_tag.get('href', None)  # Use get to avoid KeyError
                             text = a_tag.text.strip()
-                            row_data.append(f"{url}, {text}")
+                            row_data.append(url)
+                            row_data.append(text)
                         else:
                             row_data.append(td.text.strip())
                     rows.append(row_data)
