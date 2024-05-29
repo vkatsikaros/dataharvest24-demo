@@ -32,13 +32,13 @@ if response.status_code == 200:
                         if a_tag is not None:
                             url = a_tag.get('href', None)  # Use get to avoid KeyError
                             text = a_tag.text.strip()
-                            row_data.append(f'"{url}", "{text}"')
+                            row_data.append(f"{url}, {text}")
                         else:
-                            row_data.append(f'"{td.text.strip()}"')
+                            row_data.append(td.text.strip())
                     rows.append(row_data)
             else:
                 print("Tbody not found in the table.")
-    
+
             output = io.StringIO()
             csv_writer = csv.writer(output)
             
