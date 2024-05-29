@@ -17,19 +17,22 @@ if response.status_code == 200:
             rows = []
             tbody = table.find('tbody')
             if tbody is not None:
+                row_index = 0
                 for tr in tbody.find_all('tr'):
-                    row_data = []
-                    for td in tr.find_all('td'):
-                        # Find the <a> tag within the <td>
-                        a_tag = td.find('a')
-                        if a_tag is not None:
-                            url = a_tag.get('href', None)  # Use get to avoid KeyError
-                            text = a_tag.text.strip()
-                            row_data.append(url)
-                            row_data.append(text)
-                        else:
-                            row_data.append(td.text.strip())
-                    rows.append(row_data[3:5])
+                    if row_index % 2 == 0:
+                        row_data = []
+                        for td in tr.find_all('td'):
+                            # Find the <a> tag within the <td>
+                            a_tag = td.find('a')
+                            if a_tag is not None:
+                                url = a_tag.get('href', None)  # Use get to avoid KeyError
+                                text = a_tag.text.strip()
+                                row_data.append(url)
+                                row_data.append(text)
+                            else:
+                                row_data.append(td.text.strip())
+                        rows.append(row_data[3:5])
+                    row_index += 1
             else:
                 print("Tbody not found in the table.")
 
