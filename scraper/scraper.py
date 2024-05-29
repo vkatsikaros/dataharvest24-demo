@@ -17,33 +17,26 @@ if response.status_code == 200:
             rows = []
             tbody = table.find('tbody')
             if tbody is not None:
-                row_index = 0
+
                 for tr in tbody.find_all('tr'):
-                    if row_index % 2 == 0:
-                        row_data = []
-                        for td in tr.find_all('td'):
-                            # Find the <a> tag within the <td>
-                            a_tag = td.find('a')
-                            if a_tag is not None:
-                                url = a_tag.get('href', None)  # Use get to avoid KeyError
-                                text = a_tag.text.strip()
-                                row_data.append(url)
-                                row_data.append(text)
-                            else:
-                                row_data.append(td.text.strip())
-                        rows.append(row_data[3:5])
-                    row_index += 1
+                    row_data = []
+                    for td in tr.find_all('td'):
+                        # Find the second <a> tag within the <td>
+                        a_tags = td.find_all('a')
+                        if len(a_tags) >= 2:
+                            second_a_tag = a_tags[1]
+                            code_span = second_a_tag.find('span', class_='pspItemCateAndNo')
+                            if code_span is not None:
+                                code = code_span.text.strip().split(':')[-1].strip()
+                                row_data.append(code)
+                        else:
+                            row_data.append('')
+                    rows.append(row_data)
             else:
                 print("Tbody not found in the table.")
 
-            output = io.StringIO()
-            csv_writer = csv.writer(output)
-            
             for row in rows:
-                csv_writer.writerow(row)
-
-            csv_content = output.getvalue()
-            print(csv_content)
+                print("Code:", row[0])
         else:
             print("Table not found within the div. Check the structure.")
     else:
